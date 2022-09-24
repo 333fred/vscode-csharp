@@ -31,7 +31,12 @@
 			"group": {
 				"kind": "build",
 				"isDefault": true
-			}
+			},
+      "options": {
+        "env": {
+          "NODE_OPTIONS": "--openssl-legacy-provider"
+        }
+      }
 		},
 		{
 			"label": "test",

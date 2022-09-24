@@ -468,7 +468,7 @@ export class OmniSharpServer {
             await boot;
 
             const compilerLogArray = await vscode2.workspace.fs.readFile(compilerLogUri[0]);
-            
+
             //const launchResult = await launchOmniSharp(cwd, args, launchInfo, this.platformInfo, options, this.monoResolver, this.dotnetResolver);
             //this.eventStream.post(new ObservableEvents.OmnisharpLaunch(launchResult.hostVersion, launchResult.hostPath, launchResult.hostIsMono, launchResult.command, launchResult.process.pid));
 
@@ -484,11 +484,14 @@ export class OmniSharpServer {
 
             let connect = this._doConnect(disposables, options);
 
-            dotnet.OmniSharp.WebAssembly.Driver.OnWriteLine.subscribe(line => {
-                console.log('recieved: ' + line);
+            dotnet.OmniSharp.WebAssembly.Driver.OnWriteLine.subscribe((line: any) => {
+                console.log('received: ' + line);
                 this._onLineReceived(line);
             });
-            const result = await dotnet.OmniSharp.WebAssembly.Driver.InitializeAsync(compilerLogArray);
+
+            const workspacePath = await vscode2.window.showInputBox({ prompt: "Workspace path" });
+
+            const result = await dotnet.OmniSharp.WebAssembly.Driver.InitializeAsync(compilerLogArray, workspacePath);
             console.log(result);
             await connect;
 
